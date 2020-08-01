@@ -14,10 +14,11 @@ const SOCKET_PROTOCOL = SOL_UDP;          // Set Socket Level as UDP
 const SOCKET_LEVEL    = SOL_SOCKET;       // Retrieve options at the socket level
 const NAME_OPTION     = MCAST_JOIN_GROUP; // Join multicast group
 const VAL_OPTION      = 1;                // Join group 1
+const LEN_RECEIVE_MAX_DEFAULT = 1024;     // Max length of a message to receive.
 
 $name_host   = getenv('NAME_HOST_SELF');
 $port        = intval(getenv('PORT_UDP_BROADCAST'));
-$len_msg_max = strlen(str_repeat('あ', 255));
+$len_msg_max = getenv('LEN_MAX_RECEIVE') ?: LEN_RECEIVE_MAX_DEFAULT;
 
 // Create socket
 $sock = socket_create(SOCKET_DOMAIN, SOCKET_TYPE, SOCKET_PROTOCOL);
@@ -32,7 +33,7 @@ while (true) {
     $from_port = 0;  // Port number used to received
 
     // Receive message and buffer
-    $result = socket_recvfrom($sock, $buff, $len_msg_max, $flag, $from_ip, $from_port);
+    $result = socket_recvfrom($sock, $buff, intval($len_msg_max), $flag, $from_ip, $from_port);
     if (false === $result) {
         continue;
     }
