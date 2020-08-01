@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  # ===========================================================================
+  #  UDP Broadcast Senders
+  # ===========================================================================
+  # Ash Shell Sender
+  sender-ash:
+    container_name: sender-ash
+    build: https://github.com/KEINOS/UDP_Broadcast_Station_Ash.git
+    environment:
+      NAME_HOST_SELF: sender-ash
+    depends_on:
+      - receiver-php7
+
+  # ===========================================================================
+  #  UDP Broadcast Receivers (Listeners)
+  # ===========================================================================
+  # PHP7 Receiver (Listener)
+  receiver-php7:
+    container_name: receiver-php7
+    build: .
+    environment:
+      NAME_HOST_SELF: receiver-php7
